@@ -31,32 +31,32 @@ public class PoolCard : MonoBehaviour
         }
     }
     #endregion
-    public Dictionary<string, IObjectPool<Card>> dicPool = new Dictionary<string, IObjectPool<Card>>();
+    public Dictionary<int, IObjectPool<Card>> dicPool = new Dictionary<int, IObjectPool<Card>>();
     [SerializeField] private Transform poolPoint;
 
-    public void SetPooling(cardFaces faces, cardScore score)
+    public void SetPooling(CardSuits suit, CardRanks rank)
     {
         IObjectPool<Card> card = new ObjectPool<Card>(OnCreatePool, OnGetPool, OnReleasePool);
-        if (dicPool.ContainsKey(CardHelper.GetCardId(faces, score).ToString()))
+        if (dicPool.ContainsKey(CardHelper.GetCardId(suit, rank)))
         {
             return;
         }
-        dicPool.Add(CardHelper.GetCardId(faces, score).ToString(), card);
+        dicPool.Add(CardHelper.GetCardId(suit, rank), card);
     }
-    public Card GetPool(cardFaces faces, cardScore score, Sprite sprite)
+    public Card GetPool(CardSuits suit, CardRanks rank, Sprite sprite)
     {
-        if (!dicPool.ContainsKey(CardHelper.GetCardId(faces, score).ToString()))
+        if (!dicPool.ContainsKey(CardHelper.GetCardId(suit, rank)))
         {
-            SetPooling(faces, score);
+            SetPooling(suit, rank);
         }
-        Card card = dicPool[CardHelper.GetCardId(faces, score).ToString()].Get();
-        card.SetScore(score);
-        card.SetIconCard(sprite, faces);
+        Card card = dicPool[CardHelper.GetCardId(suit, rank)].Get();
+        card.SetRank(rank);
+        card.SetSuitCard(sprite, suit);
         return card;
     }
     public void ReleasePool(Card card)
     {
-        dicPool[CardHelper.GetCardId(card.face, card.score).ToString()].Release(card); ;
+        dicPool[CardHelper.GetCardId(card.suit, card.rank)].Release(card); ;
     }
 
     public Card OnCreatePool()

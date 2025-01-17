@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: CardAssets
   m_EditorClassIdentifier: 
   cardPrefab: {fileID: 7661964513827905078, guid: 867077cd20011d24e89e16cf87d66268, type: 3}
-  cardFaces:
+  suitCardIcon:
   - {fileID: 1797006760, guid: 51480964c0bf57542adfbe613cad5357, type: 3}
   - {fileID: 602127432, guid: 51480964c0bf57542adfbe613cad5357, type: 3}
   - {fileID: -1256088792, guid: 51480964c0bf57542adfbe613cad5357, type: 3}

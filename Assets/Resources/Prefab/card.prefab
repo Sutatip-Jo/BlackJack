@@ -598,8 +598,8 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 5452679969733983487}
   - {fileID: 8376023397506018691}
+  - {fileID: 5452679969733983487}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -627,9 +627,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8451fcce6313e3046bcf0b169b016ff5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  frontCard: {fileID: 1869116526386327936}
+  backCard: {fileID: 6058302404910577615}
   frontImage: {fileID: 3914565076881760518}
   backImage: {fileID: 4400267095460895724}
   iconCardTop: {fileID: 7963001508089139944}
   iconCardBottom: {fileID: 0}
-  scoreTop: {fileID: 3973217616885665414}
-  scoreBottom: {fileID: 8407184909448987670}
+  tmpRankTop: {fileID: 3973217616885665414}
+  tmpRankBottom: {fileID: 8407184909448987670}

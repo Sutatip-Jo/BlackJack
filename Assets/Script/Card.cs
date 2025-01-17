@@ -6,45 +6,48 @@ using UnityEngine.UI;
 
 public class Card : MonoBehaviour
 {
+    public GameObject frontCard;
+    public GameObject backCard;
     public Image frontImage;
     public Image backImage;
     public Image iconCardTop;
     public Image iconCardBottom;
-    public TextMeshProUGUI scoreTop;
-    public TextMeshProUGUI scoreBottom;
+    public TextMeshProUGUI tmpRankTop;
+    public TextMeshProUGUI tmpRankBottom;
 
-    public cardFaces face { get; private set; }
-    public cardScore score { get; private set; }
+    public CardSuits suit { get; private set; }
+    public CardRanks rank { get; private set; }
 
-    public void SetIconCard(Sprite sprite, cardFaces face)
+    public void SetSuitCard(Sprite sprite, CardSuits suits)
     {
-        this.face = face;
+        this.suit = suits;
         if (iconCardTop != null)
             iconCardTop.sprite = sprite;
         if (iconCardBottom != null)
             iconCardBottom.sprite = sprite;
     }
-    public void SetScore(cardScore score)
+    public void SetRank(CardRanks rank)
     {
-        this.score = score;
-        if (scoreTop != null)
-            scoreTop.text = score.ToString();
-        if (scoreBottom != null)
-            scoreBottom.text = score.ToString();
+        this.rank = rank;
+        string rankName = CardHelper.GetRankToShort(rank);
+        if (tmpRankTop != null)
+            tmpRankTop.text = rankName;
+        if (tmpRankBottom != null)
+            tmpRankBottom.text = rankName;
     }
     public void ShowFront()
     {
-        if (frontImage != null)
-            frontImage.gameObject.SetActive(true);
-        if (backImage != null)
-            backImage.gameObject.SetActive(false);
+        if (frontCard != null)
+            frontCard.gameObject.SetActive(true);
+        if (backCard != null)
+            backCard.gameObject.SetActive(false);
     }
     public void ShowBack()
     {
-        if (frontImage != null)
-            frontImage.gameObject.SetActive(false);
-        if (backImage != null)
-            backImage.gameObject.SetActive(true);
+        if (frontCard != null)
+            frontCard.gameObject.SetActive(false);
+        if (backCard != null)
+            backCard.gameObject.SetActive(true);
     }
     public void SetFrontImage(Sprite sprite)
     {

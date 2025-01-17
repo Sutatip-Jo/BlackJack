@@ -90,7 +90,7 @@ public class CardAssets : ScriptableObject
     }
     #endregion
     public Card cardPrefab;
-    public List<Sprite> cardFaces;
+    public List<Sprite> suitCardIcon;
     public Card CraeteCard()
     {
         return Instantiate(CardAssets.Instance.cardPrefab);
