@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 
@@ -11,6 +12,11 @@ public class PlayerManager : MonoBehaviour
     public Transform transformPlayer;
     public int playerScore { get; private set; }
     public TextMeshProUGUI tmpScore;
+    public bool isPlayerTurn;
+    public void SetIsPlayerTurn(bool isActive)
+    {
+        this.isPlayerTurn = isActive;
+    }
     public void SetScoreText()
     {
         if (tmpScore != null)
@@ -18,6 +24,37 @@ public class PlayerManager : MonoBehaviour
             // tmpScore.text = "Score: " + playerScore;
             tmpScore.text = playerScore.ToString();
         }
+    }
+    public void Hit(TableDeck deck)
+    {
+        if (playerScore > 21 || !isPlayerTurn)
+        {
+            return;
+        }
+        Card card = deck.GetTopCard();
+        ReceiveCard(card);
+        deck.RemoveCard(card);
+        ShowCard(card);
+        if (playerScore > 21)
+        {
+            Stand();
+        }
+    }
+    public void Stand()
+    {
+        // if (playerScore > 21)
+        // {
+        //     CheckWinner();
+        //     return;
+        // }
+        // ShowAllCards();
+        // while (dealer.playerScore < player.playerScore)
+        // {
+        //     Hit(dealer);
+        // }
+        // CheckWinner();
+        isPlayerTurn = false;
+        GameManager.Instance.OnPlayerStand();
     }
     public void AddCard(Card card)
     {
@@ -27,11 +64,52 @@ public class PlayerManager : MonoBehaviour
             return;
         }
         playerCard.Add(CardHelper.GetCardId(card.suit, card.rank), card);
-        CalculateScore();
     }
     public void RemoveCard(Card card)
     {
         playerCard.Remove(CardHelper.GetCardId(card.suit, card.rank));
+    }
+    public void ShowCard(Card card)
+    {
+        if (playerCard.ContainsKey(CardHelper.GetCardId(card.suit, card.rank)))
+        {
+            card.ShowFront();
+            card.SetIsFaceUp(true);
+        }
+        CalculateScore();
+    }
+    public void HideCard(Card card)
+    {
+        if (playerCard.ContainsKey(CardHelper.GetCardId(card.suit, card.rank)))
+        {
+            card.ShowBack();
+            card.SetIsFaceUp(false);
+        }
+        CalculateScore();
+    }
+    public void ShowFirstCard()
+    {
+        HideAllCards();
+        playerCard.First().Value.ShowFront();
+        playerCard.First().Value.SetIsFaceUp(true);
+        CalculateScore();
+    }
+    public void ShowAllCards()
+    {
+        foreach (KeyValuePair<int, Card> card in playerCard)
+        {
+            card.Value.ShowFront();
+            card.Value.SetIsFaceUp(true);
+        }
+        CalculateScore();
+    }
+    public void HideAllCards()
+    {
+        foreach (KeyValuePair<int, Card> card in playerCard)
+        {
+            card.Value.ShowBack();
+            card.Value.SetIsFaceUp(false);
+        }
         CalculateScore();
     }
     public void ClearCards()
@@ -48,7 +126,6 @@ public class PlayerManager : MonoBehaviour
     {
         AddCard(card);
         card.transform.SetParent(transformPlayer);
-        card.ShowFront();
     }
 
     private void CalculateScore()
@@ -58,6 +135,10 @@ public class PlayerManager : MonoBehaviour
 
         foreach (var card in playerCard.Values)
         {
+            if (!card.isFaceUp)
+            {
+                continue;
+            }
             switch (card.rank)
             {
                 case CardRanks.Ace:

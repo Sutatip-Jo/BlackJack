@@ -14,10 +14,14 @@ public class Card : MonoBehaviour
     public Image iconCardBottom;
     public TextMeshProUGUI tmpRankTop;
     public TextMeshProUGUI tmpRankBottom;
-
     public CardSuits suit { get; private set; }
     public CardRanks rank { get; private set; }
+    public bool isFaceUp;
 
+    public void SetIsFaceUp(bool isActive)
+    {
+        this.isFaceUp = isActive;
+    }
     public void SetSuitCard(Sprite sprite, CardSuits suits)
     {
         this.suit = suits;

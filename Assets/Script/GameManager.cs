@@ -3,13 +3,33 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-public class DealerManager : MonoBehaviour
+public class GameManager : MonoBehaviour
 {
+    #region Singleton
+    private static GameManager instance = null;
+    public static GameManager Instance
+    {
+        get
+        {
+            return instance;
+        }
+    }
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else if (instance != this)
+        {
+            Destroy(gameObject);
+        }
+    }
+    #endregion
     public TableDeck tableDeck;
     public PlayerManager player;
     public PlayerManager dealer;
     public TextMeshProUGUI tmpWinLose;
-    private bool isPlayerTurn = true;
 
     private void Start()
     {
@@ -22,49 +42,35 @@ public class DealerManager : MonoBehaviour
         tmpWinLose.gameObject.SetActive(false);
         this.tableDeck.createDeck();
         this.tableDeck.ShuffleDeck();
-        isPlayerTurn = true;
+        player.SetIsPlayerTurn(true);
+        dealer.SetIsPlayerTurn(true);
         DealCards();
     }
 
     public void DealCards()
     {
-        Hit(player);
-        Hit(dealer);
-        Hit(player);
-        Hit(dealer);
+        player.Hit(tableDeck);
+        dealer.Hit(tableDeck);
+        player.Hit(tableDeck);
+        dealer.Hit(tableDeck);
+        dealer.ShowFirstCard();
     }
-
-    public void OnClickHit()
+    public void OnPlayerHit()
     {
-        Hit(player);
+        player.Hit(tableDeck);
     }
-
-    public void Hit(PlayerManager player)
+    public void OnPlayerStand()
     {
-        if (isPlayerTurn == false)
-        {
-            return;
-        }
-        Card card = tableDeck.GetTopCard();
-        player.ReceiveCard(card);
-        this.tableDeck.RemoveCard(card);
-        if (player.playerScore > 21)
-        {
-            Stand();
-        }
-    }
-
-    public void Stand()
-    {
-        isPlayerTurn = false;
         if (player.playerScore > 21)
         {
             CheckWinner();
             return;
         }
+        player.SetIsPlayerTurn(false);
+        dealer.ShowAllCards();
         while (dealer.playerScore < player.playerScore)
         {
-            Hit(dealer);
+            dealer.Hit(tableDeck);
         }
         CheckWinner();
     }
