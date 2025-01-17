@@ -15,11 +15,17 @@ public class PlayerManager : MonoBehaviour
     {
         if (tmpScore != null)
         {
-            tmpScore.text = "Score: " + playerScore;
+            // tmpScore.text = "Score: " + playerScore;
+            tmpScore.text = playerScore.ToString();
         }
     }
     public void AddCard(Card card)
     {
+        if (playerCard.ContainsKey(CardHelper.GetCardId(card.suit, card.rank)))
+        {
+            Debug.Log("Card already exists");
+            return;
+        }
         playerCard.Add(CardHelper.GetCardId(card.suit, card.rank), card);
         CalculateScore();
     }
@@ -28,7 +34,7 @@ public class PlayerManager : MonoBehaviour
         playerCard.Remove(CardHelper.GetCardId(card.suit, card.rank));
         CalculateScore();
     }
-    public void ClearCard()
+    public void ClearCards()
     {
         foreach (KeyValuePair<int, Card> card in playerCard)
         {
@@ -38,14 +44,6 @@ public class PlayerManager : MonoBehaviour
         playerScore = 0;
         SetScoreText();
     }
-    // public void DrawCardFromDeck(TableDeck deck)
-    // {
-    //     Card card = deck.GetTopCard();
-    //     deck.RemoveCard(card);
-    //     AddCard(card);
-    //     card.transform.SetParent(transformPlayer);
-    //     card.ShowFront();
-    // }
     public void ReceiveCard(Card card)
     {
         AddCard(card);

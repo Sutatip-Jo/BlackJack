@@ -8,17 +8,25 @@ public class DealerManager : MonoBehaviour
     public TableDeck tableDeck;
     public PlayerManager player;
     public PlayerManager dealer;
+    public TextMeshProUGUI tmpWinLose;
+    private bool isPlayerTurn = true;
+
     private void Start()
     {
         StartGame();
+
     }
+
     public void StartGame()
     {
-        tableDeck.createDeck();
-        tableDeck.ShuffleDeck();
-        DealCard();
+        tmpWinLose.gameObject.SetActive(false);
+        this.tableDeck.createDeck();
+        this.tableDeck.ShuffleDeck();
+        isPlayerTurn = true;
+        DealCards();
     }
-    public void DealCard()
+
+    public void DealCards()
     {
         Hit(player);
         Hit(dealer);
@@ -26,28 +34,46 @@ public class DealerManager : MonoBehaviour
         Hit(dealer);
     }
 
+    public void OnClickHit()
+    {
+        Hit(player);
+    }
+
     public void Hit(PlayerManager player)
     {
+        if (isPlayerTurn == false)
+        {
+            return;
+        }
         Card card = tableDeck.GetTopCard();
         player.ReceiveCard(card);
-        tableDeck.RemoveCard(card);
+        this.tableDeck.RemoveCard(card);
         if (player.playerScore > 21)
         {
             Stand();
         }
     }
+
     public void Stand()
     {
-        while (dealer.playerScore < 17)
+        isPlayerTurn = false;
+        if (player.playerScore > 21)
         {
-            dealer.ReceiveCard(tableDeck.GetTopCard());
+            CheckWinner();
+            return;
         }
+        while (dealer.playerScore < player.playerScore)
+        {
+            Hit(dealer);
+        }
+        CheckWinner();
     }
+
     public void ResetGame()
     {
-        player.ClearCard();
-        dealer.ClearCard();
-        tableDeck.ResetDeck();
+        tableDeck.ClearDeck();
+        player.ClearCards();
+        dealer.ClearCards();
         StartGame();
     }
 
@@ -55,23 +81,30 @@ public class DealerManager : MonoBehaviour
     {
         if (player.playerScore > 21)
         {
-            Debug.Log("Player Bust");
+            ShowResult("Player Bust");
         }
         else if (dealer.playerScore > 21)
         {
-            Debug.Log("Dealer Bust");
+            ShowResult("Dealer Bust");
         }
         else if (player.playerScore == dealer.playerScore)
         {
-            Debug.Log("Draw");
+            ShowResult("Draw");
         }
         else if (player.playerScore > dealer.playerScore)
         {
-            Debug.Log("Player Win");
+            ShowResult("Player Win");
         }
         else
         {
-            Debug.Log("Dealer Win");
+            ShowResult("Dealer Win");
         }
+    }
+
+    private void ShowResult(string result)
+    {
+        tmpWinLose.gameObject.SetActive(true);
+        tmpWinLose.text = result;
+        Debug.Log(result);
     }
 }

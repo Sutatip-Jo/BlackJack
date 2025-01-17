@@ -17,7 +17,10 @@ public class TableDeck : MonoBehaviour
             Sprite sprite = CardAssets.Instance.suitCardIcon[i];
             for (int j = 1; j <= 13; j++)
             {
-                deckCards.Add(CardHelper.GetCardId((CardSuits)i, (CardRanks)j), PoolCard.Instance.GetPool((CardSuits)i, (CardRanks)j, sprite));
+                Card card = PoolCard.Instance.GetPool((CardSuits)i, (CardRanks)j, sprite);
+                deckCards.Add(CardHelper.GetCardId((CardSuits)i, (CardRanks)j), card);
+                card.transform.SetParent(transformDeck);
+                card.ShowBack();
             }
         }
         ShuffleDeck();
@@ -30,14 +33,13 @@ public class TableDeck : MonoBehaviour
     {
         deckCards.Remove(CardHelper.GetCardId(card.suit, card.rank));
     }
-    public void ResetDeck()
+    public void ClearDeck()
     {
         foreach (KeyValuePair<int, Card> card in deckCards)
         {
             PoolCard.Instance.ReleasePool(card.Value);
         }
         deckCards.Clear();
-        createDeck();
     }
     public void ShuffleDeck()
     {

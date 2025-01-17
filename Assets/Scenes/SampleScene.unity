@@ -1109,7 +1109,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 612287269}
         m_TargetAssemblyTypeName: DealerManager, Assembly-CSharp
-        m_MethodName: Hit
+        m_MethodName: OnClickHit
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
