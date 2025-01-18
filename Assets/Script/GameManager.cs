@@ -34,7 +34,11 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         StartGame();
+    }
 
+    public void OnClickReturnToLobby()
+    {
+        SceneHelper.LoadScene(SceneHelper.LobbyScene);
     }
 
     public void StartGame()

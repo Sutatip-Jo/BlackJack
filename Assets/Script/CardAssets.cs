@@ -72,11 +72,11 @@ public class CardAssets : ScriptableObject
             {
                 try
                 {
-                    instance = Resources.Load<CardAssets>(ResourcesPath + FolderName + AssetName);
+                    instance = Resources.Load<CardAssets>(FolderName + AssetName);
                 }
                 catch
                 {
-                    throw new Exception("Unable to load FoodConfig");
+                    throw new Exception("Unable to load CardAssets");
                 }
             }
 #if UNITY_EDITOR
@@ -91,8 +91,4 @@ public class CardAssets : ScriptableObject
     #endregion
     public Card cardPrefab;
     public List<Sprite> suitCardIcon;
-    public Card CraeteCard()
-    {
-        return Instantiate(CardAssets.Instance.cardPrefab);
-    }
 }
