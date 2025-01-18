@@ -42,17 +42,6 @@ public class PlayerManager : MonoBehaviour
     }
     public void Stand()
     {
-        // if (playerScore > 21)
-        // {
-        //     CheckWinner();
-        //     return;
-        // }
-        // ShowAllCards();
-        // while (dealer.playerScore < player.playerScore)
-        // {
-        //     Hit(dealer);
-        // }
-        // CheckWinner();
         isPlayerTurn = false;
         GameManager.Instance.OnPlayerStand();
     }
